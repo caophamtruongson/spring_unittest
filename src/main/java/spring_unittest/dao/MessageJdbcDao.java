@@ -1,0 +1,75 @@
+package spring_unittest.dao;
+
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import spring_unittest.entity.Message;
+import spring_unittest.mapper.MessageMapper;
+
+public class MessageJdbcDao implements BaseDao<Message> {
+  private DataSource dataSource;
+  private JdbcTemplate jdbcTemplateObject;
+
+  @Override
+  public void setDataSource(DataSource ds) {
+    this.dataSource = ds;
+    this.jdbcTemplateObject = new JdbcTemplate(ds);
+  }
+
+  @Override
+  public void create(Message object) {
+    String SQL =
+        "insert into messages (name, message, views, created_at) values (?, ?, 0, UNIX_TIMESTAMP())";
+
+    jdbcTemplateObject.update(SQL, object.getName(), object.getMessage());
+  }
+
+  @Override
+  public Message findOne(long id) {
+    String SQL = "select * from messages where id = ? and deleted_at IS NULL limit 1";
+
+    List<Message> messages = jdbcTemplateObject.query(SQL, new Object[] {id}, new MessageMapper());
+
+    return (messages.size() > 0) ? messages.get(0) : new Message();
+  }
+
+  @Override
+  public List<Message> findAll() {
+    String SQL = "select * from messages where deleted_at IS NULL order by id desc";
+
+    List<Message> messages = jdbcTemplateObject.query(SQL, new MessageMapper());
+    return messages;
+  }
+
+  @Override
+  public void delete(long id) {
+    String SQL = "update messages set deleted_at = UNIX_TIMESTAMP() where id = ?";
+    jdbcTemplateObject.update(SQL, id);
+  }
+
+  @Override
+  public void update(long id, Message message) {
+    String SQL =
+        "update messages " + " set name = ? " + ", message = ? "
+            + ", updated_at = UNIX_TIMESTAMP() " + " where id = ? and deleted_at IS NULL";
+    jdbcTemplateObject.update(SQL, message.getName(), message.getMessage(), id);
+  }
+
+  public void updateViews(Message message) {
+    long count = message.getViews() + 1;
+    String SQL =
+        "update messages " + " set views = ? " + ", updated_at = UNIX_TIMESTAMP() "
+            + " where id = ? and deleted_at IS NULL";
+    jdbcTemplateObject.update(SQL, count, message.getId());
+  }
+
+  public List<Message> getHotMessage() {
+    String SQL = "select * from messages where deleted_at IS NULL order by views desc limit 3";
+
+    List<Message> messages = jdbcTemplateObject.query(SQL, new MessageMapper());
+    return messages;
+  }
+}

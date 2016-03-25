@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC  
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+<tiles-definitions>  
+    <definition name="message" extends="DefaultTemplate">
+      <put-attribute name="body" value="/WEB-INF/view/message/index.jsp" />
+    </definition>
+    
+     <definition name="message/form" extends="DefaultTemplate">
+      <put-attribute name="body" value="/WEB-INF/view/message/form.jsp" />
+    </definition>
+    
+    <definition name="message/view" extends="DefaultTemplate">
+      <put-attribute name="body" value="/WEB-INF/view/message/view.jsp" />
+    </definition>
+</tiles-definitions> 
