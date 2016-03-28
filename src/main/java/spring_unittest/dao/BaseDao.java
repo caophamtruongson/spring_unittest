@@ -2,19 +2,26 @@ package spring_unittest.dao;
 
 import java.util.List;
 
-import javax.sql.DataSource;
+import lombok.Setter;
 
-public interface BaseDao<T> {
+import org.springframework.jdbc.core.JdbcTemplate;
 
-  public void setDataSource(DataSource ds);
+@Setter
+public abstract class BaseDao<T> {
 
-  public void create(T object);
+  protected JdbcTemplate jdbcTemplateObject;
 
-  public T findOne(long id);
+  public void create(T object) {};
 
-  public List<T> findAll();
+  public T findOne(long id) {
+    return null;
+  }
 
-  public void delete(long id);
+  public List<T> findAll() {
+    return null;
+  }
 
-  public void update(long id, T ob);
+  public void delete(long id) {};
+
+  public void update(long id, T ob) {};
 }

@@ -38,7 +38,6 @@ public class MessageController {
   @RequestMapping(value = {"/", "/messages"}, method = RequestMethod.GET)
   public String printMessage(Model model) {
 
-
     model.addAttribute("title", "Message List");
     model.addAttribute("messages", messageJdbcDao.findAll());
     model.addAttribute("hotMessages", messageJdbcDao.getHotMessage());

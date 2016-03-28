@@ -2,22 +2,16 @@ package spring_unittest.dao;
 
 import java.util.List;
 
-import javax.sql.DataSource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import spring_unittest.entity.Message;
 import spring_unittest.mapper.MessageMapper;
 
-public class MessageJdbcDao implements BaseDao<Message> {
-  private DataSource dataSource;
-  private JdbcTemplate jdbcTemplateObject;
 
-  @Override
-  public void setDataSource(DataSource ds) {
-    this.dataSource = ds;
-    this.jdbcTemplateObject = new JdbcTemplate(ds);
-  }
+public class MessageJdbcDao extends BaseDao<Message> {
+
+  @Autowired
+  private MessageMapper messageMapper;
 
   @Override
   public void create(Message object) {
@@ -31,7 +25,7 @@ public class MessageJdbcDao implements BaseDao<Message> {
   public Message findOne(long id) {
     String SQL = "select * from messages where id = ? and deleted_at IS NULL limit 1";
 
-    List<Message> messages = jdbcTemplateObject.query(SQL, new Object[] {id}, new MessageMapper());
+    List<Message> messages = jdbcTemplateObject.query(SQL, new Object[] {id}, messageMapper);
 
     return (messages.size() > 0) ? messages.get(0) : new Message();
   }
@@ -40,7 +34,7 @@ public class MessageJdbcDao implements BaseDao<Message> {
   public List<Message> findAll() {
     String SQL = "select * from messages where deleted_at IS NULL order by id desc";
 
-    List<Message> messages = jdbcTemplateObject.query(SQL, new MessageMapper());
+    List<Message> messages = jdbcTemplateObject.query(SQL, messageMapper);
     return messages;
   }
 
@@ -69,7 +63,7 @@ public class MessageJdbcDao implements BaseDao<Message> {
   public List<Message> getHotMessage() {
     String SQL = "select * from messages where deleted_at IS NULL order by views desc limit 3";
 
-    List<Message> messages = jdbcTemplateObject.query(SQL, new MessageMapper());
+    List<Message> messages = jdbcTemplateObject.query(SQL, messageMapper);
     return messages;
   }
 }
