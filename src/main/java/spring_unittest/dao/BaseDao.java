@@ -11,17 +11,13 @@ public abstract class BaseDao<T> {
 
   protected JdbcTemplate jdbcTemplateObject;
 
-  public void create(T object) {};
+  public abstract void create(T object);
 
-  public T findOne(long id) {
-    return null;
-  }
+  public abstract T findOne(long id);
 
-  public List<T> findAll() {
-    return null;
-  }
+  public abstract List<T> findAll();
 
-  public void delete(long id) {};
+  public abstract void delete(long id);
 
-  public void update(long id, T ob) {};
+  public abstract void update(long id, T ob);
 }

@@ -5,5 +5,5 @@
   <strong>Message:</strong>
   ${message.message}</p>
 
-<a href="/messages/edit/1">Edit</a> |
+<a href="/messages/edit/${message.id}">Edit</a> |
 <a href="/messages">Back</a>
