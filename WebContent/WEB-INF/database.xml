@@ -25,9 +25,5 @@
         <constructor-arg name="dataSource" ref="dataSource" />
     </bean>
     
-    <bean id="messageJdbcDao" class="spring_unittest.dao.MessageJdbcDao">
-      <property name="jdbcTemplateObject" ref="jdbcTemplate" />
-    </bean>
-    
-    <bean id="messageMapper" class="spring_unittest.mapper.MessageMapper" />
+    <import resource="message.xml"/>
 </beans>    

@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import spring_unittest.dao.MessageJdbcDao;
 import spring_unittest.entity.Message;
+import spring_unittest.service.MessageService;
 
 @Controller
 public class MessageController {
@@ -22,7 +22,7 @@ public class MessageController {
   private static final Logger logger = Logger.getLogger(MessageController.class);
 
   @Autowired
-  private MessageJdbcDao messageJdbcDao;
+  private MessageService messageService;
 
   @ModelAttribute("message")
   public Message getMessageObject() {
@@ -38,9 +38,7 @@ public class MessageController {
   @RequestMapping(value = {"/", "/messages"}, method = RequestMethod.GET)
   public String printMessage(Model model) {
 
-    model.addAttribute("title", "Message List");
-    model.addAttribute("messages", messageJdbcDao.findAll());
-    model.addAttribute("hotMessages", messageJdbcDao.getHotMessage());
+    model.addAllAttributes(messageService.prepareContentPrintMessage());
     return "message";
   }
 
@@ -52,15 +50,11 @@ public class MessageController {
    * @return
    */
   @RequestMapping(value = "/messages/view/{id}", method = RequestMethod.GET)
-  public String viewMessage(@PathVariable("id") Long id, ModelMap model) {
+  public String viewMessage(@PathVariable("id") long id, ModelMap model) {
 
-    logger.warn("================== View Message id = " + id.toString() + " ===================");
+    logger.warn("================== View Message id = " + id + " ===================");
 
-    Message message = messageJdbcDao.findOne(id);
-    messageJdbcDao.updateViews(message);
-
-    model.addAttribute("message", message);
-    model.addAttribute("title", "View Message");
+    model.addAllAttributes(messageService.prepareContentViewMessagee(id));
     return "message/view";
   }
 
@@ -72,15 +66,11 @@ public class MessageController {
    * @return
    */
   @RequestMapping(value = {"/messages/clone/{id}"}, method = RequestMethod.GET)
-  public String cloneMessage(@PathVariable("id") Long id, ModelMap model) {
+  public String cloneMessage(@PathVariable("id") long id, ModelMap model) {
 
-    logger.warn("================== Edit Message id = " + id.toString() + " ===================");
+    logger.warn("================== Edit Message id = " + id + " ===================");
 
-    Message message = messageJdbcDao.findOne(id);
-
-    model.addAttribute("message", message);
-    model.addAttribute("title", "Clone Message");
-    model.addAttribute("url", "/messages/create");
+    model.addAllAttributes(messageService.prepareContentCloneMessage(id));
     return "message/form";
   }
 
@@ -94,8 +84,7 @@ public class MessageController {
   public String newMessage(@ModelAttribute("message") Message message, BindingResult bindingResult,
       ModelMap model) {
 
-    model.addAttribute("title", "New Message");
-    model.addAttribute("url", "/messages/create");
+    model.addAllAttributes(messageService.prepareContentNewMessage());
     return "message/form";
   }
 
@@ -112,15 +101,7 @@ public class MessageController {
     logger
         .warn("================== Create Message = " + message.getName() + " ===================");
 
-    if (bindingResult.hasErrors()) {
-      model.addAttribute("title", "New Message");
-      model.addAttribute("url", "/messages/create");
-      return "message/form";
-    }
-
-    messageJdbcDao.create(message);
-
-    return "redirect:/messages";
+    return messageService.actionCreateMessage(message, bindingResult, model);
   }
 
   /**
@@ -131,15 +112,11 @@ public class MessageController {
    * @return
    */
   @RequestMapping(value = {"/messages/edit/{id}"}, method = RequestMethod.GET)
-  public String editMessage(@PathVariable("id") Long id, ModelMap model) {
+  public String editMessage(@PathVariable("id") long id, ModelMap model) {
 
-    logger.warn("================== Edit Message id = " + id.toString() + " ===================");
+    logger.warn("================== Edit Message id = " + id + " ===================");
 
-    Message message = messageJdbcDao.findOne(id);
-
-    model.addAttribute("message", message);
-    model.addAttribute("title", "Edit Message");
-    model.addAttribute("url", "/messages/update/" + id.toString());
+    model.addAllAttributes(messageService.actionEditMessage(id));
     return "message/form";
   }
 
@@ -150,18 +127,10 @@ public class MessageController {
    * @return
    */
   @RequestMapping(value = "/messages/update/{id}", method = RequestMethod.POST)
-  public String updateMessage(@PathVariable("id") Long id,
+  public String updateMessage(@PathVariable("id") long id,
       @ModelAttribute("message") @Valid Message message, BindingResult bindingResult, ModelMap model) {
 
-    if (bindingResult.hasErrors()) {
-      model.addAttribute("title", "Edit Message");
-      model.addAttribute("url", "/messages/update/" + id.toString());
-      return "message/form";
-    }
-
-    messageJdbcDao.update(id, message);
-
-    return "redirect:/messages";
+    return messageService.actionUpdateMessage(id, message, bindingResult, model);
   }
 
   /**
@@ -172,11 +141,10 @@ public class MessageController {
    * @return
    */
   @RequestMapping(value = "/messages/delete/{id}", method = RequestMethod.GET)
-  public String deleteMessage(@PathVariable("id") Long id, ModelMap model) {
+  public String deleteMessage(@PathVariable("id") long id, ModelMap model) {
 
-    logger.warn("================== Delete Message id = " + id.toString() + " ===================");
+    logger.warn("================== Delete Message id = " + id + " ===================");
 
-    messageJdbcDao.delete(id);
-    return "redirect:/messages";
+    return messageService.actionDeleteMessage(id);
   }
 }
