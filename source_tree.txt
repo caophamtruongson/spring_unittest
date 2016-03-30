@@ -1,0 +1,82 @@
+.
+├── WebContent
+│   ├── META-INF
+│   │   └── MANIFEST.MF
+│   ├── WEB-INF
+│   │   ├── applicationContext.xml
+│   │   ├── database.xml
+│   │   ├── lib
+│   │   ├── message.xml
+│   │   ├── tiles-message.xml
+│   │   ├── tiles.xml
+│   │   ├── view
+│   │   │   ├── layout
+│   │   │   │   ├── footer.jsp
+│   │   │   │   ├── header.jsp
+│   │   │   │   └── layout.jsp
+│   │   │   └── message
+│   │   │       ├── form.jsp
+│   │   │       ├── index.jsp
+│   │   │       └── view.jsp
+│   │   └── web.xml
+│   └── resources
+│       ├── css
+│       │   ├── bootstrap-theme.min.css
+│       │   └── bootstrap.min.css
+│       ├── fonts
+│       │   ├── glyphicons-halflings-regular.eot
+│       │   ├── glyphicons-halflings-regular.svg
+│       │   ├── glyphicons-halflings-regular.ttf
+│       │   ├── glyphicons-halflings-regular.woff
+│       │   └── glyphicons-halflings-regular.woff2
+│       ├── images
+│       │   └── favicon.ico
+│       └── js
+├── build.gradle
+├── source_tree.txt
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── spring_unittest
+│   │   │       ├── controller
+│   │   │       │   └── MessageController.java
+│   │   │       ├── dao
+│   │   │       │   ├── BaseDao.java
+│   │   │       │   └── MessageJdbcDao.java
+│   │   │       ├── entity
+│   │   │       │   └── Message.java
+│   │   │       ├── mapper
+│   │   │       │   └── MessageMapper.java
+│   │   │       ├── service
+│   │   │       │   └── MessageService.java
+│   │   │       └── utils
+│   │   │           ├── CommonUtils.java
+│   │   │           └── Constants.java
+│   │   └── resources
+│   │       ├── application.properties
+│   │       └── log4j.properties
+│   └── test
+│       ├── java
+│       │   └── spring_unittest
+│       │       ├── controller
+│       │       │   └── MessageControllerTest.java
+│       │       ├── dao
+│       │       │   └── MessageJdbcDaoTest.java
+│       │       ├── entity
+│       │       │   └── MessageTest.java
+│       │       ├── mapper
+│       │       │   └── MessageMapperTest.java
+│       │       ├── service
+│       │       │   └── MessageServiceTest.java
+│       │       ├── test_data
+│       │       │   ├── AbstractData.java
+│       │       │   └── MessageData.java
+│       │       └── utils
+│       │           ├── CommonUtilsTest.java
+│       │           └── ContantsTest.java
+│       └── resources
+│           └── data
+│               └── messages.csv
+└── treesource.sh
+
+35 directories, 44 files
